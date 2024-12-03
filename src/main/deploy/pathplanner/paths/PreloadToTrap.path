@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.8112329977987371,
+        "y": 4.53077406598469
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.02048139347474,
+        "y": 1.9747162500278903
+      },
+      "isLocked": false,
+      "linkedName": "SourceSubwooferStart"
+    },
+    {
+      "anchor": {
+        "x": 4.278513472732358,
+        "y": 3.139491354404182
+      },
+      "prevControl": {
+        "x": 3.6617148151636663,
+        "y": 2.522692696835489
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": -120.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -120.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "TrapAutoPaths",
+  "previewStartingState": {
+    "rotation": -61.29168198595302,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

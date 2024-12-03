@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3042908446928008,
+        "y": 5.571204809076285
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.94552335863931,
+        "y": 4.8030678792839065
+      },
+      "isLocked": false,
+      "linkedName": "Subwoofer"
+    },
+    {
+      "anchor": {
+        "x": 2.5061262287104187,
+        "y": 4.141362415104079
+      },
+      "prevControl": {
+        "x": 1.9003820542591068,
+        "y": 4.679239395661281
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "STAGE"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.15,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -25.896022588874608,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "SubwooferRangedPaths",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

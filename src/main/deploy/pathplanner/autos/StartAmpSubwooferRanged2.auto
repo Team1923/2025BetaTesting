@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7046435911053639,
+      "y": 6.6140808645253655
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AmpSubwooferStartTo2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Starts",
+  "choreoAuto": false
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.5965607186255898,
+      "y": 4.421139470985942
+    },
+    "rotation": -58.326087417798156
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SourceSubwooferStartTo4"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Starts",
+  "choreoAuto": false
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4632598660168363,
+      "y": 7.35233546385972
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AmpStartToMidFieldRanged"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Starts",
+  "choreoAuto": false
+}
