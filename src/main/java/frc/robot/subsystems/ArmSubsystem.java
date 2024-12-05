@@ -10,11 +10,13 @@ import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -71,8 +73,6 @@ public class ArmSubsystem extends SubsystemBase {
   private TalonFX armPrimary = new TalonFX(ArmConstants.armMotorPrimaryID, "rio");
   private TalonFX armFollower = new TalonFX(ArmConstants.armMotorFollowerID, "rio");
 
-  public final DCMotorSim armSimModel = new DCMotorSim(DCMotor.getKrakenX60Foc(2), ArmConstants.armGearRatio, ArmConstants.armMomentOfInertia);
-
 
 
   /** Creates a new ArmSubsystem. */
@@ -117,6 +117,7 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public void setPercentOut(double out) {
     armPrimary.setControl(new DutyCycleOut(out));
+
   }
 
   /**
@@ -144,9 +145,9 @@ public class ArmSubsystem extends SubsystemBase {
   public double getPercentOutput() {
     return armPrimary.get();
   }
-  // public StatusSignal<Double> getArmVoltage(){
-  //   return armPrimary.getMotorVoltage().getValue();
-  // }
+  public StatusSignal<Voltage> getArmVoltage(){
+    return armPrimary.getMotorVoltage();
+  }
 
   /**
    * Gets the supply current of the arm primary motor
@@ -199,14 +200,6 @@ public class ArmSubsystem extends SubsystemBase {
     armFollower.setPosition(0);
   }
 
-//  public void setCoast() {
-//   armPrimary.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast));
-//  }
-
-//  public void setBrake() {
-//   armPrimary.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
-//  }
-
 
 
   @Override
@@ -222,23 +215,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
 
-
-  @Override
-  public void simulationPeriodic(){
-    TalonFXSimState armPrimarySimState = armPrimary.getSimState();
-
-
-    armPrimarySimState.setSupplyVoltage(RobotController.getBatteryVoltage());
-
-    
-
-    armSimModel.setInputVoltage(addFriction(armPrimarySimState.getMotorVoltage(), ArmConstants.armSimFriction));
-    armSimModel.update(0.020);
-
-    armPrimarySimState.setRawRotorPosition(ArmConstants.armGearRatio * armSimModel.getAngularPositionRotations());
-    armPrimarySimState.setRotorVelocity(ArmConstants.armGearRatio * Units.radiansToRotations(armSimModel.getAngularVelocityRadPerSec()));
-
-  }
 
   //yoinked from swerve module sim
   private double addFriction(double motorVoltage, double frictionVoltage) {

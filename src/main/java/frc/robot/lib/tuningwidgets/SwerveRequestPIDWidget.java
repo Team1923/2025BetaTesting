@@ -4,8 +4,9 @@
 
 package frc.robot.lib.tuningwidgets;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
+
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -20,6 +21,7 @@ private PhoenixPIDController swerveHeadingPID;
 private ComplexWidget headingPIDWidget;
 
   public SwerveRequestPIDWidget(SwerveStates swerveState){
+
 
     swerveHeadingPID = ((SwerveRequest.FieldCentricFacingAngle)swerveState.REQUEST).HeadingController;
 

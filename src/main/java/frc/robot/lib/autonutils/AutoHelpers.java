@@ -4,10 +4,14 @@
 
 package frc.robot.lib.autonutils;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,9 +28,23 @@ public class AutoHelpers {
 
   public static Command commandPathFrom(String pathName){
 
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    PathPlannerPath path;
+    try { //SHOULD return here
+      path = PathPlannerPath.fromPathFile(pathName);
+      return AutoBuilder.followPath(path);
 
-    return AutoBuilder.followPath(path);
+    } catch (FileVersionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+     return generateBlankCommand();
   }
 
 
@@ -37,17 +55,48 @@ public class AutoHelpers {
 
     Pose2d lastPose = poses.get(poses.size()-1);
 
-    return new Pose2d(lastPose.getX(), lastPose.getY(), path.getGoalEndState().getRotation());
+    return new Pose2d(lastPose.getX(), lastPose.getY(), path.getGoalEndState().rotation());
 
   }
   public static Command pathfindToEndOfPath(String name){
-    PathPlannerPath path = PathPlannerPath.fromPathFile(name);
+    PathPlannerPath path;
+    try {
+      path = PathPlannerPath.fromPathFile(name);
+    } catch (FileVersionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+
+      return generateBlankCommand();
+      
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+
+      return generateBlankCommand();
+
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+
+      return generateBlankCommand();
+
+    }
+
 
     return AutoBuilder.pathfindToPose(getLastPoseOf(path), path.getGlobalConstraints());
   }
 
   public static Command goalCentricShoot(){
     return new ParallelDeadlineGroup(new ShootGamePiece(), new SwerveStateMachine(SwerveSubsystem.getInstance(), () -> 0, () -> 0, () -> 0));
+  }
+
+
+  private static Command generateBlankCommand(){
+    return new Command() {
+      public boolean isFinished() {
+        return true;
+      };
+    };
   }
 
 

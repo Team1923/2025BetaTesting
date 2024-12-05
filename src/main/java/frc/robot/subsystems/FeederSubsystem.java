@@ -39,7 +39,6 @@ public class FeederSubsystem extends SubsystemBase {
 
   private TalonFX feederMotor = new TalonFX(FeederConstants.feederID, "rio");
 
-  private final FlywheelSim feederSimModel = new FlywheelSim(DCMotor.getKrakenX60Foc(1), 1, FeederConstants.feederMomentOfInertia);
 
   /*
    * Beam Break initializations. These are DigitalInput objects that return
@@ -82,17 +81,4 @@ public class FeederSubsystem extends SubsystemBase {
     
   }
 
-  @Override
-  public void simulationPeriodic(){
-    TalonFXSimState feederSimState = feederMotor.getSimState();
-
-
-    feederSimState.setSupplyVoltage(RobotController.getBatteryVoltage());
-
-    feederSimModel.setInputVoltage(feederSimState.getMotorVoltage());
-    feederSimModel.update(0.020);
-
-    feederSimState.setRotorVelocity(ArmConstants.armGearRatio * Units.radiansToRotations(feederSimModel.getAngularVelocityRadPerSec()));
-
-  }
 }

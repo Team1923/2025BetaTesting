@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.controls.ControlRequest;
@@ -76,8 +77,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private TalonFX shooterTop = new TalonFX(ShooterConstants.shooterTopID, "rio");
   private TalonFX shooterBottom = new TalonFX(ShooterConstants.shooterBottomID, "rio");
 
-  private final FlywheelSim shooterTopSimModel = new FlywheelSim(DCMotor.getKrakenX60Foc(1), 1, ShooterConstants.shooterMomentOfIntertia);
-  private final FlywheelSim shooterBottomSimModel = new FlywheelSim(DCMotor.getKrakenX60Foc(1), 1, ShooterConstants.shooterMomentOfIntertia);
 
 
   /* Initialize TalonSRX used for blower motor */
@@ -197,23 +196,5 @@ public class ShooterSubsystem extends SubsystemBase {
     // TODO: ((MotionMagicVelocityVoltage)(States.RANGED.OUTPUT)).Velocity = updated
     // value;
   }
-
-  @Override
-  public void simulationPeriodic(){
-    TalonFXSimState shooterTopSimState = shooterTop.getSimState();
-    TalonFXSimState shooterBottomSimState = shooterBottom.getSimState();
-
-    shooterTopSimState.setSupplyVoltage(RobotController.getBatteryVoltage());
-    shooterBottomSimState.setSupplyVoltage(RobotController.getBatteryVoltage());
-
-    shooterTopSimModel.setInputVoltage(shooterTopSimState.getMotorVoltage());
-    shooterBottomSimModel.setInputVoltage(shooterBottomSimState.getMotorVoltage());
-    
-    shooterTopSimModel.update(0.020);
-    shooterBottomSimModel.update(0.020);
-
-    shooterTopSimState.setRotorVelocity(Units.radiansToRotations(shooterTopSimModel.getAngularVelocityRadPerSec()));
-    shooterBottomSimState.setRotorVelocity(Units.radiansToRotations(shooterBottomSimModel.getAngularVelocityRadPerSec()));
-
-  }
+  
 }

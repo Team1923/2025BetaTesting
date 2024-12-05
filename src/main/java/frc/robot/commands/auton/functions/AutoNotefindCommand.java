@@ -4,8 +4,7 @@
 
 package frc.robot.commands.auton.functions;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.FieldCentricFacingAngle;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -48,6 +47,7 @@ public class AutoNotefindCommand extends Command {
     addRequirements(swerve);
 
     this.direction = searchDirection.direction();
+
               
 
   }

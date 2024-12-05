@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.StatusSignal;
 
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
@@ -17,7 +18,7 @@ public class ManualArmControl extends Command {
 
   private ArmSubsystem arm;
   private DoubleSupplier control;
-  private StatusSignal<Double> voltage;
+  private StatusSignal<Voltage> voltage;
 
   /** Creates a new ManualArmControl. */
   public ManualArmControl(ArmSubsystem arm, DoubleSupplier control) {

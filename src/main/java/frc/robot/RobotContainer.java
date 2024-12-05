@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import com.ctre.phoenix6.Utils;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -17,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.InterpolationConstants;
 import frc.robot.StateHandler.ScoringType;
 import frc.robot.commands.auton.routines.AmpRanged.AmpRanged123;
@@ -67,7 +70,7 @@ public class RobotContainer {
 
   /* Helper class Instantiation */
   private final InfoSubsystem infoSubsystem = new InfoSubsystem(driverXboxController, operatorPS5Controller);
-  private final Telemetry swerveLogger = new Telemetry(TunerConstants.kSpeedAt12VoltsMps);
+  private final Telemetry swerveLogger = new Telemetry(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond));
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private static InterpolationConstants interpConsts = new InterpolationConstants(); //just needs to be constructed for the sake of constructor
   private final AutoInstatiateSelector autoInstatiateSelector = new AutoInstatiateSelector();
@@ -88,9 +91,11 @@ public class RobotContainer {
                                       () -> -driverXboxController.getLeftX(), 
                                       () -> -driverXboxController.getRightX()));
 
-    if (Utils.isSimulation()) {
-      swerveSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
-    }
+    /*They don't have this in the new example */
+    // if (Utils.isSimulation()) {
+    //   swerveSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
+    // }
+
     swerveSubsystem.registerTelemetry(swerveLogger::telemeterize);
 
     /* Driver Button Bindings */
@@ -127,6 +132,14 @@ public class RobotContainer {
     if (stateHandler.isAngleRPMTuning){
       operatorPS5Controller.touchpad().onTrue(scoringMode(ScoringType.TUNING));
     }
+
+    // Run SysId routines when holding back/start and X/Y.
+        // Note that each routine should be run exactly once in a single log.
+        driverXboxController.back().and(driverXboxController.y()).whileTrue(swerveSubsystem.sysIdDynamic(Direction.kForward));
+        driverXboxController.back().and(driverXboxController.x()).whileTrue(swerveSubsystem.sysIdDynamic(Direction.kReverse));
+        driverXboxController.start().and(driverXboxController.y()).whileTrue(swerveSubsystem.sysIdQuasistatic(Direction.kForward));
+        driverXboxController.start().and(driverXboxController.x()).whileTrue(swerveSubsystem.sysIdQuasistatic(Direction.kReverse));
+
 
 
 

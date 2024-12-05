@@ -4,9 +4,13 @@
 
 package frc.robot.statecommands;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import java.util.function.DoubleSupplier;
 
-
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,6 +23,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.lib.swerve.TunerConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.SwerveStates;
+import pabeles.concurrency.IntOperatorTask.Max;
 
 public class SwerveStateMachine extends Command {
 
@@ -27,6 +32,8 @@ public class SwerveStateMachine extends Command {
 
   private StateHandler stateHandler = StateHandler.getInstance();
 
+  private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+  private double MaxAngularRate = DegreesPerSecond.of(540).in(RadiansPerSecond);
 
   private DoubleSupplier translationSupplier;
   private DoubleSupplier strafeSupplier;
@@ -80,41 +87,41 @@ public class SwerveStateMachine extends Command {
         stateHandler.swerveState = SwerveStates.FIELD_CENTRIC;
       case FIELD_CENTRIC: 
           request = ((SwerveRequest.FieldCentric)SwerveStates.FIELD_CENTRIC.REQUEST)
-            .withVelocityX(translation * TunerConstants.kSpeedAt12VoltsMps)
-            .withVelocityY(strafe * TunerConstants.kSpeedAt12VoltsMps)
-            .withRotationalRate(rotation * Units.degreesToRadians(TunerConstants.kMaxAngularVelocity));
+            .withVelocityX(translation * MaxSpeed)
+            .withVelocityY(strafe * MaxSpeed)
+            .withRotationalRate(rotation * MaxAngularRate);
             break;
 
       case ROBOT_CENTRIC:
         request = ((SwerveRequest.RobotCentric)SwerveStates.ROBOT_CENTRIC.REQUEST)
-        .withVelocityX(translation * TunerConstants.kSpeedAt12VoltsMps)
-        .withVelocityY(strafe * TunerConstants.kSpeedAt12VoltsMps)
-        .withRotationalRate(rotation * Units.degreesToRadians(TunerConstants.kMaxAngularVelocity));
+        .withVelocityX(translation * MaxSpeed)
+        .withVelocityY(strafe * MaxSpeed)
+        .withRotationalRate(rotation * MaxAngularRate);
         break;
 
       case FACING_AMP:
         request = ((SwerveRequest.FieldCentricFacingAngle)SwerveStates.FACING_AMP.REQUEST)
-        .withVelocityX(translation * TunerConstants.kSpeedAt12VoltsMps)
-        .withVelocityY(strafe * TunerConstants.kSpeedAt12VoltsMps)
+        .withVelocityX(translation * MaxSpeed)
+        .withVelocityY(strafe * MaxSpeed)
         .withTargetDirection(Rotation2d.fromDegrees((DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) ? -90 : -90)); //TODO: check headings
         break;
       case FACING_TRAP:
         request = ((SwerveRequest.FieldCentricFacingAngle)SwerveStates.FACING_AMP.REQUEST)
-        .withVelocityX(translation * TunerConstants.kSpeedAt12VoltsMps)
-        .withVelocityY(strafe * TunerConstants.kSpeedAt12VoltsMps)
+        .withVelocityX(translation * MaxSpeed)
+        .withVelocityY(strafe * MaxSpeed)
         .withTargetDirection(Rotation2d.fromDegrees(roundToClosestTrapHeading(swerve.getGyroYaw())));
         break;
       case FACING_CLIMB:
          request = ((SwerveRequest.FieldCentricFacingAngle)SwerveStates.FACING_AMP.REQUEST)
-        .withVelocityX(translation * TunerConstants.kSpeedAt12VoltsMps)
-        .withVelocityY(strafe * TunerConstants.kSpeedAt12VoltsMps)
+        .withVelocityX(translation * MaxSpeed)
+        .withVelocityY(strafe * MaxSpeed)
         .withTargetDirection(Rotation2d.fromDegrees(roundToClosestClimbHeading(swerve.getGyroYaw())));
         break;
       case GOAL_CENTRIC:
         if (stateHandler.hasSpeakerTag() && Math.abs(rotation) < 0.5){
           request = ((SwerveRequest.FieldCentricFacingAngle)SwerveSubsystem.SwerveStates.GOAL_CENTRIC.REQUEST)
-          .withVelocityX(0.4 * translation * TunerConstants.kSpeedAt12VoltsMps)
-          .withVelocityY(0.4 * strafe * TunerConstants.kSpeedAt12VoltsMps)
+          .withVelocityX(0.4 * translation * MaxSpeed)
+          .withVelocityY(0.4 * strafe * MaxSpeed)
           .withTargetDirection(Rotation2d.fromDegrees(Math.IEEEremainder(swerve.getGyroYaw()+stateHandler.llTx(), 360)));
 
           // System.out.println(Rotation2d.fromDegrees(swerve.getGyroYaw()+stateHandler.llTx()).rotateBy(parameters.operatorForwardDirection););
@@ -123,16 +130,16 @@ public class SwerveStateMachine extends Command {
         }
       default://Equivilent to field centric
         request = ((SwerveRequest.FieldCentric)SwerveStates.FIELD_CENTRIC.REQUEST)
-                  .withVelocityX(translation * TunerConstants.kSpeedAt12VoltsMps)
-                  .withVelocityY(strafe * TunerConstants.kSpeedAt12VoltsMps)
-                  .withRotationalRate(rotation * Units.degreesToRadians(TunerConstants.kMaxAngularVelocity));
+                  .withVelocityX(translation * MaxSpeed)
+                  .withVelocityY(strafe * MaxSpeed)
+                  .withRotationalRate(rotation * MaxAngularRate);
 
     }
     
     // else if (currentRequest == SwerveRequests.NOTE_SEARCHING){
     //    requestObj =((SwerveRequest.FieldCentricFacingAngle)SwerveRequests.NOTE_SEARCHING.request)
-    //     .withVelocityX(0.5 * sideInversions()[0] * TunerConstants.kSpeedAt12VoltsMps)
-    //     .withVelocityY(0.5 * sideInversions()[1] * TunerConstants.kSpeedAt12VoltsMps)
+    //     .withVelocityX(0.5 * sideInversions()[0] * MaxSpeed)
+    //     .withVelocityY(0.5 * sideInversions()[1] * MaxSpeed)
     //     .withTargetDirection(Rotation2d.fromDegrees((DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) ? -90 : -90));
 
     //     System.out.println("HERER TOO");
