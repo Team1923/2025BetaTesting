@@ -135,10 +135,10 @@ public class RobotContainer {
 
     // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        driverXboxController.back().and(driverXboxController.y()).whileTrue(swerveSubsystem.sysIdDynamic(Direction.kForward));
-        driverXboxController.back().and(driverXboxController.x()).whileTrue(swerveSubsystem.sysIdDynamic(Direction.kReverse));
-        driverXboxController.start().and(driverXboxController.y()).whileTrue(swerveSubsystem.sysIdQuasistatic(Direction.kForward));
-        driverXboxController.start().and(driverXboxController.x()).whileTrue(swerveSubsystem.sysIdQuasistatic(Direction.kReverse));
+        driverXboxController.a().and(driverXboxController.y()).whileTrue(swerveSubsystem.sysIdDynamic(Direction.kForward));
+        driverXboxController.a().and(driverXboxController.x()).whileTrue(swerveSubsystem.sysIdDynamic(Direction.kReverse));
+        driverXboxController.b().and(driverXboxController.y()).whileTrue(swerveSubsystem.sysIdQuasistatic(Direction.kForward));
+        driverXboxController.b().and(driverXboxController.x()).whileTrue(swerveSubsystem.sysIdQuasistatic(Direction.kReverse));
 
 
 
